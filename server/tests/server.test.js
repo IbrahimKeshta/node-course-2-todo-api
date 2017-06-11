@@ -34,8 +34,8 @@ describe('POST /todos', () => {
                 }
                 //we make find for {text} to we have above and equal 1
                 Todo.find({text}).then((todos) => {
-                    expect(todos.length).toBe(1);
-                    expect(todos[0].text).toBe(text);
+                    expect(todos.length).toBe(1); // we add one todo item
+                    expect(todos[0].text).toBe(text); // expect the same text we add
                     done();
                 }).catch((e) => done(e));
             });

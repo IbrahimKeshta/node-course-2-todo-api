@@ -32,15 +32,19 @@ const { User } = require('./../server/models/user');
  * Challenge
  * query users collection
  * handle the three cases
- * *user not found
- * *user found
- * *handle any error
+ * *user not found *case1*
+ * *user found *case2*
+ * *handle any error *case3*
  * load user model
- */
+ */  
 var userId = '58d30b9c7dba1726a413306f';
+if (!ObjectID.isValid(userId)){ // Validate User ID
+    console.log('ID not valid'); 
+}
 User.findById(userId).then((user) => {
     if (!user) {
         return console.log('user not found'); //case 1
     }
+
     console.log('User By Id',JSON.stringify(user, undefined, 2)); // case 2
 }).catch((e) => console.log(e)); // case 3
