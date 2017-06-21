@@ -1,6 +1,6 @@
 const expect = require('expect');
 const request = require('supertest');
-const {ObjectID} = require('mongodb');
+const { ObjectID } = require('mongodb');
 const { app } = require('./../server');
 const { Todo } = require('./../models/todo');
 
@@ -15,7 +15,7 @@ const todos = [{
 //insertmany to insert all docs of todos array
 beforeEach((done) => {
     Todo.remove({}).then(() => {
-       return Todo.insertMany(todos);
+        return Todo.insertMany(todos);
     }).then(() => done());
 });
 
@@ -35,7 +35,7 @@ describe('POST /todos', () => {
                     return done(err);
                 }
                 //we make find for {text} to we have above and equal 1
-                Todo.find({text}).then((todos) => {
+                Todo.find({ text }).then((todos) => {
                     expect(todos.length).toBe(1); // we add one todo item
                     expect(todos[0].text).toBe(text); // expect the same text we add
                     done();
