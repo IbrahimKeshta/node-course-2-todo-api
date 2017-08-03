@@ -1,3 +1,14 @@
+var env = process.env.NODE_ENV || 'development' // only set on horuko
+console.log('env *****', env);
+
+if (env === 'development') {
+ process.env.PORT = 3000;
+ process.env.MONGODB_URI = 'mongodb://localhost:27017/TodoApp';
+} else if (env === 'test') {
+ process.env.PORT = 3000;
+ process.env.MONGODB_URI = 'mongodb://localhost:27017/TodoAppTest';
+}
+
 const _ = require('lodash');
 const { ObjectID } = require('mongodb');
 const express = require('express');
@@ -8,7 +19,7 @@ var { Todo } = require('./models/todo');
 var { User } = require('./models/user');
 
 var app = express();
-var port = process.env.PORT || 3000;
+var port = process.env.PORT;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
