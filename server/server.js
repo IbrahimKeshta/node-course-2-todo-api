@@ -1,14 +1,4 @@
-var env = process.env.NODE_ENV || 'development' // only set on horuko
-console.log('env *****', env);
-
-if (env === 'development') {
- process.env.PORT = 3000;
- process.env.MONGODB_URI = 'mongodb://localhost:27017/TodoApp';
-} else if (env === 'test') {
- process.env.PORT = 3000;
- process.env.MONGODB_URI = 'mongodb://localhost:27017/TodoAppTest';
-}
-
+require('./config/config');
 const _ = require('lodash');
 const { ObjectID } = require('mongodb');
 const express = require('express');
@@ -37,6 +27,7 @@ app.post('/todos', (req, res) => {
     });
 });
 
+// GET all todos
 app.get('/todos', (req, res) => {
     Todo.find().then((todos) => {
         res.send({ todos })
@@ -128,7 +119,19 @@ app.patch('/todos/:id', (req, res) => {
       })
 });
 
+// USER Route
+app.post('/users', (req, res) => {
+    var body = _.pick(req.body, ['email', 'password']);
+    var user = new User(body);
 
+    user.save().then(() => {
+       return user.generateAuthToken();
+    }).then((token) => {
+        res.header('x-auth', token).send(user);
+    }).catch((e) => {
+        res.status(400).send(e);
+    });
+});
 
 
 
