@@ -32,21 +32,38 @@ var UserSchema = new mongoose.Schema({
 });
 
 UserSchema.methods.toJSON = function () { // what exactly gets sent back when mongoose model convert into a json value
-     var user = this;
-     var userObject = user.toObject();
+    var user = this;
+    var userObject = user.toObject();
 
-     return _.pick(userObject, ['_id', 'email']);
+    return _.pick(userObject, ['_id', 'email']);
 };
-UserSchema.methods.generateAuthToken =function() {
- var user = this;
- var access = 'auth';
- var token = jwt.sign({_id: user._id.toHexString(), access}, 'abc123').toString();
+UserSchema.methods.generateAuthToken = function () { //instance method called with indvidual document   
+    var user = this;
+    var access = 'auth';
+    var token = jwt.sign({ _id: user._id.toHexString(), access }, 'abc123').toString();
 
- user.tokens.push({access, token});
+    user.tokens.push({ access, token });
 
- return user.save().then(() => {     // save user model
-    return token;
- });
+    return user.save().then(() => {     // save user model
+        return token;
+    });
+};
+
+UserSchema.statics.findByToken = function (token) { // model method called with model 
+    var User = this;
+    var decoded;
+
+    try {
+       decoded = jwt.verify(token, 'abc123');
+    } catch (e) {
+        return Promise.reject();
+    }
+
+    return User.findOne({
+         '_id': decoded._id,
+       'tokens.token': token,
+       'tokens.access': 'auth' 
+    });
 };
 var User = mongoose.model('User', UserSchema);
 
