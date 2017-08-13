@@ -122,6 +122,7 @@ app.patch('/todos/:id', (req, res) => {
 
 // USER Route
 // POST /users
+//signup route
 app.post('/users', (req, res) => {
     var body = _.pick(req.body, ['email', 'password']);
     var user = new User(body);
