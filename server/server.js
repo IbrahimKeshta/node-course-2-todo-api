@@ -16,7 +16,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 // Post
 app.post('/todos', authenticate, (req, res) => {
-    console.log(req.body);
     var todo = new Todo({
         text: req.body.text,
         _creator: req.user._id
